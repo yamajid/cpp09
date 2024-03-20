@@ -1,34 +1,28 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: yamajid <yamajid@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/03/15 21:28:56 by yamajid           #+#    #+#              #
-#    Updated: 2024/03/17 03:36:39 by yamajid          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME 	=	btc
-Run		=	c++ -g
-FLAGS	=	-Wall -Wextra -Werror -std=c++98
-RM		=	rm -f
-
-SRCS 	=	 main.cpp BitcoinExchange.cpp
-
-otherS = $(SRCS:.cpp=.o)
+NAME      = btc
+CC        = c++ -std=c++98
+FLAGS     = -Wall -Wextra -Werror
+RM        = rm -fr
+OBJDIR    = .obj
+FILES     = BitcoinExchange main
+SRC       = $(FILES:=.cpp)
+OBJ       = $(addprefix $(OBJDIR)/, $(FILES:=.o))
+INCLUEDES = BitcoinExchange.hpp
 
 all: $(NAME)
-%.o: %.cpp
-	$(Run) $(FLAGS) -c $< -o $@
 
-$(NAME): $(otherS) BitcoinExchange.hpp
-	$(Run) $(FLAGS) -o $(NAME) $(otherS)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
+
+$(OBJDIR)/%.o: %.cpp $(INCLUEDES)
+	mkdir -p $(dir $@)
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(otherS)
+	$(RM) $(OBJDIR) $(OBJ)
+
 fclean: clean
-	$(RM) $(NAME) 
+	$(RM)  $(NAME)
 
 re: fclean all
+.PHONY: all clean fclean re
+

@@ -1,34 +1,28 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: yamajid <yamajid@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/03/15 21:28:56 by yamajid           #+#    #+#              #
-#    Updated: 2024/03/15 21:32:22 by yamajid          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME 	=	Span
-Run		=	c++ -g
-FLAGS	=	-Wall -Wextra -Werror -std=c++98
-RM		=	rm -f
-
-SRCS 	=	 main.cpp Span.cpp
-
-otherS = $(SRCS:.cpp=.o)
+NAME      = RPN
+CC        = c++ -std=c++98
+FLAGS     = -Wall -Wextra -Werror
+RM        = rm -fr
+OBJDIR    = .obj
+FILES     = main RPN
+SRC       = $(FILES:=.cpp)
+OBJ       = $(addprefix $(OBJDIR)/, $(FILES:=.o))
+INCLUEDES = RPN.hpp
 
 all: $(NAME)
-%.o: %.cpp
-	$(Run) $(FLAGS) -c $< -o $@
 
-$(NAME): $(otherS) Span.hpp
-	$(Run) $(FLAGS) -o $(NAME) $(otherS)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
+
+$(OBJDIR)/%.o: %.cpp $(INCLUEDES)
+	mkdir -p $(dir $@)
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(otherS)
+	$(RM) $(OBJDIR) $(OBJ)
+
 fclean: clean
-	$(RM) $(NAME) 
+	$(RM)  $(NAME)
 
 re: fclean all
+.PHONY: all clean fclean re
+
